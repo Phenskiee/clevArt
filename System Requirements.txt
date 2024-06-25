@@ -1,0 +1,23 @@
+System Requirements
+--Programming Language
+1. HTML
+2. CSS
+3. JS
+4. Python
+
+--Software Requirements
+1. VScode
+
+--Library Requirements
+//install the following libraries using "pip install [name of libraries]
+1. tensorFlow
+2. matplotlib
+3. numpy
+4. panda
+5. flask
+
+--How to run?
+1.change your directory where the file saved
+2. type this in your cmd
+3. python main.py
+4. click the link
