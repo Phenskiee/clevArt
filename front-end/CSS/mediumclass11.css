@@ -1,0 +1,439 @@
+:root {
+    --bg-color: #3E362E;
+    --font-color: #ffffff;
+    --font-header: 'Abril Fatface', sans-serif;
+    --font-body: 'Days One', sans-serif;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    align-items: center;
+    /*scrollbar-width: thin; /* thin, auto, or none */
+    /*scrollbar-color: #ae1010 #f0f0f0; /* thumb color, track color */
+}
+
+body {
+    overflow-y: scroll;
+    background-color: #865D36;
+    color: white;
+    font-family: 'Abril Fatface', cursive;
+    font-size: 16px; /* Base font size */
+    line-height: 1; /* Improved readability */
+}
+
+body::-webkit-scrollbar {
+    width: 2px; /* Adjust the width as needed */
+    background-color: transparent;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: #999; /* Customize the thumb color */
+}
+
+h1 {
+    text-align: center;
+    font-size: 5rem;
+}
+
+.subtitle1 {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 0.1%;
+    color: #fff;
+}
+
+.head1 {
+    text-align: center;
+    font-size: 6rem;
+    margin-top: 1%;
+}
+
+#caution-message {
+    font-size: 5rem;
+    position: relative;
+    left: 10rem;
+    bottom: 2rem;
+}
+
+.predict {
+    color: rgb(255, 255, 255);
+    font-size: 3rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+h3 {
+    color: rgb(3, 3, 3);
+    text-align: center;
+    font-size: 2.5rem;
+    opacity: 0; /* Initially hidden */
+    animation: fadeIn 2s ease forwards; /* Fade-in animation */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.prob {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+p {
+    font-size: 1rem;
+    text-align: center;
+    margin: 10px 30px;
+}
+
+.progress-bar-container {
+    background-color: #f3f3f3;
+    border: 3px solid #333;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 5px px;
+    text-align: center;
+}
+
+.progress-bar {
+    height: 25px;
+    width: 1px;
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 25px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    border-radius: 25px 0 0 25px;
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-bar-full {
+    animation: slideRight 3s ease-in-out forwards; /* Add sliding animation for 100% */
+}
+
+@keyframes slideRight {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%; /* Change to desired width */
+    }
+}
+
+.progress-label {
+    margin: 10px;
+}
+
+.progress {
+    height: 100%;
+    background-color: #605c51;
+    border-radius: 5px;
+    text-align: center;
+    color: rgb(150, 18, 18);
+    opacity: 0; /* Initially hidden */
+    animation: fadeIn 3s ease forwards; /* Fade-in animation */
+}
+
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 300px; /* Adjust width of loading bar */
+    height: 20px; /* Adjust height of loading bar */
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#prediction-container {
+    background-color: #b99264;
+    border-radius: 20px;
+    border: 2px solid #000;
+    width: 50%; /* Responsive width */
+    max-width: 800px; /* Limit width on larger screens */
+    margin: 1rem; /* Center horizontally with spacing */
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin-left: 4rem;
+}
+
+#img-view {
+    width: 80%; /* Responsive width */
+    max-width: 400px; /* Limit width on larger screens */
+    height: auto; /* Maintain aspect ratio */
+    border: 2px solid #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.179); /* Matching background color */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center horizontally with spacing */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow */
+}
+
+#img-view:hover {
+    border-color: #888;
+}
+
+#img-view img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+/* Button styles */
+.button-container {
+    /* margin-top: 1rem; */
+    display: flex;
+    /* justify-content: center; */
+    margin-left: 12%;
+    /* padding: 0; */
+}
+
+.styled-button {
+    background-color: #A79277;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: 0 0.5rem; /* Adjusted for spacing */
+}
+
+.styled-button:hover {
+    background-color: #876b53; /* Darker shade on hover */
+}
+
+.container101 {
+    display: flex;
+    flex-wrap: wrap;
+    color: rgb(231, 238, 238);
+    width: 100%;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin: 0;
+}
+
+.progress-indicator {
+    position: absolute;
+    background-color: rgba(5, 1, 1, 0.8); /* Color of progress indicator */
+    transition: width 1s ease-in-out; /* Animation transition for progress width */
+}
+
+#prediction-container {
+    display: none; /* Initially hide prediction content */
+    position: relative; /* Ensure it is positioned relative to allow z-index to work */
+}
+
+.upload-repeat {
+    font-size: 1rem; /* Responsive heading size */
+    text-align: center;
+    align-items: center;
+    position: absolute;
+    bottom: -5rem;
+    opacity: 0; /* Initially hidden */
+    animation: fadeInWithDelay 2s ease forwards 6s; /* Fade-in animation with 6s delay */
+    color: white; /* Link color */
+    text-decoration: none; /* Remove underline */
+    display: block;
+    margin: 20px 0;
+}
+
+.upload-repeat:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+@keyframes fadeInWithDelay {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+    body {
+        overflow-y: scroll;
+    }
+    h1 {
+        font-size: 3.5rem;
+    }
+
+    .head1 {
+        font-size: 4rem;
+    }
+
+    .predict {
+        font-size: 2.5rem;
+    }
+
+    h3 {
+        font-size: 2rem;
+    }
+
+    .prob {
+        font-size: 1.3rem;
+    }
+
+    .upload-repeat {
+        font-size: 1.8rem;
+    }
+
+    #prediction-container {
+        width: 90%; /* Adjust width for smaller screens */
+    }
+
+    #img-view {
+        width: 90%; /* Adjust width for smaller screens */
+    }
+}
+
+@media (max-width: 992px) {
+    body {
+        overflow-y: scroll;
+    }
+
+    .head1 {
+        font-size: 3.5rem;
+    }
+
+    .predict {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.8rem;
+    }
+
+    .prob {
+        font-size: 1.2rem;
+    }
+
+    .upload-repeat {
+        font-size: 1.6rem;
+    }
+
+    #prediction-container {
+        width: 95%; /* Adjust width for smaller screens */
+    }
+
+    #img-view {
+        width: 95%; /* Adjust width for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-y: scroll;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    .head1 {
+        font-size: 3rem;
+    }
+
+    .predict {
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .prob {
+        font-size: 1rem;
+    }
+
+    .progress-bar {
+        width: 90%;
+    }
+
+    .loading {
+        width: 90%;
+        max-width: 250px;
+    }
+
+    .upload-repeat {
+        font-size: 1.4rem;
+    }
+
+    #prediction-container {
+        width: 100%; /* Full width for mobile screens */
+        padding: 10px;
+    }
+
+    #img-view {
+        width: 100%; /* Full width for mobile screens */
+        padding: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        overflow-y: scroll;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .head1 {
+        font-size: 2.5rem;
+    }
+
+    .predict {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .prob {
+        font-size: 0.9rem;
+    }
+
+    .progress-bar {
+        width: 80%;
+    }
+
+    .loading {
+        width: 80%;
+        max-width: 200px;
+    }
+
+    .upload-repeat {
+        font-size: 1.2rem;
+    }
+
+    #prediction-container {
+        width: 100%; /* Full width for mobile screens */
+        padding: 10px;
+        margin-right: 2rem;
+        margin-left: 2rem;
+    }
+
+    #img-view {
+        width: 100%; /* Full width for mobile screens */
+        padding: 10px;
+    }
+}

@@ -1,0 +1,209 @@
+:root {
+    --navBar: #3E362E;
+    --font-color: #ffffff;
+    --link-hover: #B99264;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Inter', sans-serif;
+}
+.navbar {
+    background-color: var(--navBar);
+    font-family: 'Inter';
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    opacity: 85%;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+span img {
+    width: 90px;
+    height: 30px;
+    padding: 0;
+    margin: 0 20px;
+}
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-right: 20px;
+    color: var(--font-color);
+}
+.navbar ul {
+    display: flex;
+    list-style: none;
+}
+.navbar ul li {
+    padding: 10px 30px;
+    position: relative;
+}
+.navbar ul li a {
+    color: var(--font-color);
+    text-decoration: none;
+    font-size: 1rem;
+}
+.navbar ul li a:hover {
+    color: var(--link-hover);
+}
+.dropdown {
+    display: none;
+    position: absolute;
+    background-color: var(--navBar);
+    top: 100%;
+    left: 0;
+    width: 200px;
+    border-radius: 0 0 10% 10%;
+}
+.dropdown.active {
+    display: block;
+}
+.dropdown ul {
+    display: block;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.dropdown ul li {
+    padding: 10px;
+}
+.dropdown ul li a {
+    color: var(--font-color);
+    text-decoration: none;
+}
+.dropdown ul li a:hover {
+    color: var(--link-hover);
+}
+/* RESPONSIVE AREA */
+@media (min-width: 300px) and (max-width: 800px) {
+    .menu-toggle {
+        display: block;
+    }
+    .navbar ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 40px;
+        left: 0;
+        padding: 25px;
+        background-color: var(--navBar);
+    }
+
+    .navbar ul.active {
+        display: flex;
+    }
+
+    .navbar ul li {
+        width: 100%;
+        text-align: left;
+        padding: 15px 0;
+        position: relative;
+    }
+
+    .navbar ul li .dropdown {
+        position: relative;
+        width: 100%;
+    }
+
+    .navbar ul li .dropdown ul {
+        display: none;
+        flex-direction: column;
+    }
+
+    .navbar ul li .dropdown.active ul {
+        display: flex;
+    }
+
+    .dropdown ul li {
+        width: 100%;
+        padding: 15px 0;
+        top: -70px;
+        height: 40px;
+    }
+
+    .dropdown ul li a {
+        color: var(--font-color);
+        text-decoration: none;
+        display: block;
+        padding: 10px 20px;
+        transition: color 0.3s ease;
+    }
+
+    .dropdown ul li a:hover {
+        color: var(--link-hover);
+    }
+
+    .navbar ul li .dropdown.active {
+        display: block;
+    }
+    .navbar ul li.expanded + li {
+        margin-top: calc(100% - 70%);
+    }
+}
+
+/* FOOTER AREA */
+.footer {
+    background-color: var(--navBar);
+    font-family: 'Inter';
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    bottom: 0;
+}
+.footer ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.footer ul li {
+    padding: 0 100px;
+    color: var(--font-color);
+    white-space: nowrap;
+    margin-right: 10%;
+}
+.footer ul li a {
+    text-decoration: none;
+    color: var(--font-color);
+}
+@media (min-width: 300px) and (max-width: 800px) {
+    /* .footer {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .footer ul li {
+        flex: 1 1 auto;
+        text-align: center;
+        font-size: 14px;
+        padding: 0 20px;
+        margin-right: 5%;
+    } */
+    .footer {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 20px;
+    }
+    .footer ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    .footer ul li {
+        padding: 5px 0;
+        text-align: center;
+    }
+}

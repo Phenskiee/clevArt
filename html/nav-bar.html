@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Bar</title>
+    <link rel="stylesheet" href="/front-end/CSS/nav-bar.css">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="navbar" id="navbar">
+        <span><a href="/"><img src="/front-end/images/ClevArt_logos.png" alt="logo"></a></span>
+        <div class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars" id="open-icon"></i>
+            <i class="fas fa-times" id="close-icon" style="display:none;"></i>
+        </div>
+        <ul id="nav-list">
+            <li><a href="/">Home</a></li>
+            <li>
+                <a href="#" id="classifier-link">Classifier <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown" id="classifier-dropdown">
+                    <ul>
+                        <li><a href="/mediumClassification.html">Medium Classification</a></li>
+                        <li><a href="/genreClassification.html">Genre Classification</a></li>
+                        <li><a href="/interpretClassification.html">Art Interpretation</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li><a href="/developer.html">Developer</a></li>
+        </ul>
+    </div>
+    <!-- JS FOR RESPONSIVE -->
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const navList = document.getElementById('nav-list');
+        const openIcon = document.getElementById('open-icon');
+        const closeIcon = document.getElementById('close-icon');
+        const classifierLink = document.getElementById('classifier-link');
+        const classifierDropdown = document.getElementById('classifier-dropdown');
+
+        menuToggle.addEventListener('click', () => {
+            navList.classList.toggle('active');
+            openIcon.style.display = openIcon.style.display === 'none' ? 'block' : 'none';
+            closeIcon.style.display = closeIcon.style.display === 'none' ? 'block' : 'none';
+        });
+
+        classifierLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            classifierDropdown.classList.toggle('active');
+            classifierLink.parentElement.classList.toggle('expanded');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!classifierDropdown.contains(e.target) && e.target !== classifierLink) {
+                classifierDropdown.classList.remove('active');
+                classifierLink.parentElement.classList.remove('expanded');
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                classifierDropdown.classList.remove('active');
+                classifierLink.parentElement.classList.remove('expanded');
+            }
+        });
+    </script>
+</body>
+</html>

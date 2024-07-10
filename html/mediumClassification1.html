@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediumClassification</title>
+    <link rel="shortcut icon" type="x-icon" href="front-end/images/icon.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPK5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Days+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="front-end/CSS/mediumclass11.css">
+    <style>
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('front-end/images/mediumbg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: -1; 
+            opacity: 0.5;
+        }
+
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        #preview {
+            max-width: 300px; /* Adjust as needed */
+            max-height: 300px; /* Adjust as needed */
+            border: 2px solid #ddd; /* Optional styling */
+            border-radius: 5px; /* Optional styling */
+        }
+
+        .prediction-container {
+            display: none; /* Initially hide prediction */
+        }
+
+        #upload-again-btn {
+            display: none; /* Initially hide Upload Again button */
+            margin-top: 5px;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-in-out forwards; /* Animation for fadeIn */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    {% include 'nav-bar.html' %}
+    <h1>ClevArt</h1>
+    <h2 class="subtitle1">An Art Classification System</h2>
+    <h1 class="head1">Medium Classification</h1>
+
+    <div class="container101">
+
+        <form action="/predict_medium" method="post" enctype="multipart/form-data" class="upload-container" onsubmit="return validateForm(event)">
+            <input type="hidden" id="uploadedImageUrl" value="{{ uploaded_image_url }}">
+            <label for="imageInput" id="img-view">
+                <input type="file" name="image" accept="image/*" id="imageInput" style="display: none;" onchange="previewImage(event)">
+                <img id="preview" src="{% if uploaded_image_url %}{{ uploaded_image_url }}{% else %}front-end/images/cloud-uploader.png{% endif %}">
+            </label>
+        </form>
+
+        {% if prediction %}
+            <div id="loading-animation" class="loading">
+                <div id="progress-bar">
+                    <div class="progress-indicator" style="width: 25%;"></div>
+                    <div class="progress-indicator" style="width: 50%;"></div>
+                    <div class="progress-indicator" style="width: 75%;"></div>
+                    <div class="progress-indicator" style="width: 100%;"></div>
+                </div>
+            </div>
+            <div id="prediction-container" class="prediction-container">
+                <h2 class="predict">Medium:</h2>
+                <h3> {{ prediction }}</h3>
+                <h4 class="prob">Medium Probabilities:</h4>
+                {% for class_name, probability in class_probability %}
+                    <div class="progress-label">{{ class_name }}</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: {{ probability }}%;">{{ probability }}%</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Upload Again button outside container101 -->
+    <div class="button-container">
+        <a href="/mediumClassification.html" id="upload-again-btn" class="styled-button">Do you want to upload again?</a>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('preview');
+                output.src = reader.result;
+                localStorage.setItem('uploadedImageUrl', reader.result); // Store image data URL
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function clearImage() {
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('preview');
+            input.value = '';
+            preview.src = 'front-end/images/cloud-uploader.png';
+            localStorage.removeItem('uploadedImageUrl'); // Clear the stored image URL
+        }
+
+        function resetForm() {
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('preview');
+            const uploadAgainBtn = document.getElementById('upload-again-btn');
+
+            input.value = '';
+            preview.src = 'front-end/images/cloud-uploader.png';
+            localStorage.removeItem('uploadedImageUrl'); // Clear the stored image URL
+
+            // Hide the Upload Again button after reset
+            uploadAgainBtn.style.display = 'none';
+        }
+
+        // Ensure the uploaded image stays in the preview after form submission
+        document.addEventListener("DOMContentLoaded", function() {
+            const uploadedImageUrl = localStorage.getItem("uploadedImageUrl");
+            if (uploadedImageUrl) {
+                const preview = document.getElementById("preview");
+                preview.src = uploadedImageUrl;
+            }
+
+            const predictionContainer = document.getElementById("prediction-container");
+            const loadingAnimation = document.getElementById("loading-animation");
+
+            if (predictionContainer && loadingAnimation) {
+                predictionContainer.style.display = "none";
+                const progressIndicators = document.querySelectorAll(".progress-indicator");
+
+                progressIndicators.forEach((indicator, index) => {
+                    setTimeout(() => {
+                        indicator.style.width = "100%";
+                    }, index * 500);
+                });
+
+                setTimeout(function() {
+                    loadingAnimation.style.display = "none";
+                    predictionContainer.style.display = "block";
+                    // Show Upload Again button with animation delay
+                    setTimeout(function() {
+                        document.getElementById('upload-again-btn').style.display = 'block';
+                    }, 2000); // 2-second delay
+                }, (progressIndicators.length + 1) * 500);
+            }
+        });
+
+        function validateForm(event) {
+            const uploadedImage = document.getElementById("imageInput").files[0];
+            if (!uploadedImage && !localStorage.getItem('uploadedImageUrl')) {
+                alert("Please upload an image.");
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

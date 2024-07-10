@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre Classification</title>
+    <link rel="shortcut icon" type="image/x-icon" href="front-end/images/icon.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="front-end/CSS/genreclass1.css">
+    <link rel="stylesheet" href="front-end/CSS/nav-bar.css">
+    <style>
+        body {
+            overflow: hidden;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('front-end/images/artgenrepagebg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: -1;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    {% include 'nav-bar.html' %}
+    <h1>ClevArt</h1>
+    <h5 class="subtitle1">An Art Classification System</h5>
+    <h6 class="head1">Genre Classifier</h6>
+  
+    <div class="box">
+        <span style="--i:1;"></span>
+        <span style="--i:2;"></span>
+        <span style="--i:3;"></span>
+        <span style="--i:4;"></span>
+        <span style="--i:5;"></span>
+        <span style="--i:6;"></span>
+    </div>
+        
+    <form action="/model/predict_genre" method="post" enctype="multipart/form-data" class="upload-container" onsubmit="return validateForm(event)">
+        <input type="hidden" id="uploadedImageUrl" name="uploadedImageUrl" value="{{ uploaded_image_url }}">
+        <label for="imageInput" id="img-view">
+            <input type="file" name="image" accept="image/*" id="imageInput" style="display: none;" onchange="previewImage(event)">
+            <img id="preview" src="{{ uploaded_image_url if uploaded_image_url else 'front-end/images/cloud-uploader.png' }}" alt="Image preview">
+            <span class="upload-text">Upload any image from desktop</span>
+        </label>
+        <div class="button-container">
+            <button type="submit" class="styled-button">Scan</button>
+            <button type="button" class="styled-button" onclick="clearImage()">Clear</button>
+        </div>
+    </form>
+
+    <div id="caution-message" style="display: none;">Please upload an image.</div>
+    <div id="notification-message" style="display: none;"></div>
+
+    <div class="prediction-box">
+        <h2 style="font-family: 'Montserrat', sans-serif;">Prediction: </h2>
+    </div>
+
+    <script>
+        function validateForm(event) {
+            const uploadedImage = document.getElementById("imageInput").files[0];
+            if (!uploadedImage) {
+                document.getElementById("caution-message").style.display = "block";
+                document.getElementById("notification-message").style.display = "none";
+                event.preventDefault();
+                return false;
+            }
+
+            document.getElementById("notification-message").style.display = "block";
+            document.querySelector('.styled-button[type="submit"]').setAttribute('disabled', true);
+            return true;
+        }
+
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('preview');
+                output.src = reader.result;
+                localStorage.setItem('uploadedImage', reader.result);
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function clearImage() {
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('preview');
+            const cautionMessage = document.getElementById("caution-message");
+            const notificationMessage = document.getElementById("notification-message");
+            const submitButton = document.querySelector('.styled-button[type="submit"]');
+
+            input.value = '';
+            preview.src = 'front-end/images/cloud-uploader.png';
+            localStorage.removeItem('uploadedImage');
+            cautionMessage.style.display = "none";
+            notificationMessage.style.display = "none";
+            submitButton.removeAttribute('disabled');
+        }
+        
+        // Function to detect browser zoom level
+        function detectZoom() {
+            var ratio = 0,
+                screen = window.screen,
+                ua = navigator.userAgent.toLowerCase();
+
+            if (window.devicePixelRatio !== undefined) {
+                ratio = window.devicePixelRatio;
+            }
+            else if (~ua.indexOf('msie')) {
+                if (screen.deviceXDPI && screen.logicalXDPI) {
+                    ratio = screen.deviceXDPI / screen.logicalXDPI;
+                }
+            }
+            else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+                ratio = window.outerWidth / window.innerWidth;
+            }
+
+            if (ratio) {
+                ratio = Math.round(ratio * 100);
+            }
+
+            return ratio;
+        }
+
+        // Function to adjust font size based on zoom level
+        function adjustFontSize() {
+            var zoomLevel = detectZoom();
+            var h1Element = document.querySelector('h1');
+            var h5Element = document.querySelector('h5');
+            var h6Element = document.querySelector('h6');
+
+            if (zoomLevel >= 100) {
+                h1Element.style.fontSize = '5vw'; // Default size when zoom is 100% or higher
+                h5Element.style.fontSize = '2vw'; // Default size when zoom is 100% or higher
+                h6Element.style.fontSize = '3vw'; // Default size when zoom is 100% or higher
+            } else if (zoomLevel >= 75) {
+                h1Element.style.fontSize = '5vw'; // Larger size when zoom is between 75% and 100%
+                h5Element.style.fontSize = '2vw'; // Larger size when zoom is between 75% and 100%
+                h6Element.style.fontSize = '3vw'; // Larger size when zoom is between 75% and 100%
+            } else {
+                h1Element.style.fontSize = '5vw'; // Smaller size when zoom is less than 75%
+                h5Element.style.fontSize = '2vw'; // Smaller size when zoom is less than 75%
+                h6Element.style.fontSize = '3vw'; // Smaller size when zoom is less than 75%
+            }
+        }
+
+        // Call adjustFontSize initially
+        adjustFontSize();
+
+        // Adjust font size on window resize
+        window.onresize = function() {
+            adjustFontSize();
+        };
+    </script>
+</body>
+</html>

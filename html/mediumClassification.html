@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediumClassification</title>
+    <link rel="shortcut icon" type="x-icon" href="front-end\images\icon.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Days+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="front-end/CSS/mediumclass1.css">
+    <style>
+          body {
+            overflow-y: scroll; 
+        }
+        .background {
+            /* position: fixed; */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('front-end/images/mediumbg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            /* z-index: -1;  */
+            /* opacity: 0.5; */
+            backdrop-filter: blur(5px);
+        }
+</style>
+</head>
+<body>
+    <div class="background"></div>
+    {% include 'nav-bar.html' %}
+    <h1>ClevArt</h1>
+    <h2 class="subtitle1">An Art Classification System</h2>
+    <h1 class="head1">Medium Classification</h1>
+    <!--<div class="card">
+        <p class="text1">A Medium classifier is a machine learning model that categorizes various types of medium, such as pastel, watercolor, graphite, charcoal, oil, and acrylic.<br>It uses pattern recognition and data analysis techniques to automatically classify media based on their content characteristics.<br>This automation facilitates tasks like, improving searchability, and enhancing user experience and to determine the specific medium of the uploaded image.</p>
+    </div> -->
+    <form action="/model/predict_medium" method="post" enctype="multipart/form-data" class="upload-container" onsubmit="return validateForm(event)">
+        <input type="hidden" id="uploadedImageUrl" value="{{ uploaded_image_url }}">
+        <label for="imageInput" id="img-view">
+            <input type="file" name="image" accept="image/*" id="imageInput" style="display: none;" onchange="previewImage(event)">
+            <img id="preview" src="{% if uploaded_image_url %}{{ uploaded_image_url }}{% else %}front-end/images/cloud-uploader.png{% endif %}">
+            <!--<span>Upload any image from desktop</span> -->
+        </label>
+        <div class="button-container">
+            <button type="submit" class="styled-button">Scan</button>
+            <button type="button" class="styled-button" onclick="clearImage()">Clear</button>
+        </div>
+    </form>
+    <div id="caution-message" style="display: none; color: red;  margin-top: 20px; margin-left: 44%; ">
+        Please upload an image.
+    </div>
+    <div id="notification-message" style="display: none; color: blue; text-align: center; margin-top: 10px;">
+    </div>
+    {% if prediction %}
+        <h2>Prediction: </h2> <h3> {{ prediction }}</h3>
+        <h4>Class Probabilities:</h4>
+        {% for class_name, probability in class_probability %}
+            <div class="progress-bar">
+                <div class="progress">{{ class_name }} - {{ probability }}%</div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {%include 'footer.html'%}
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('preview');
+                output.src = reader.result;
+                localStorage.setItem('uploadedImageUrl', reader.result); // Store image data URL
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    
+        function clearImage() {
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('preview');
+            input.value = '';
+            preview.src = 'front-end/images/cloud-uploader.png';
+            localStorage.removeItem('uploadedImageUrl'); // Clear the stored image URL
+        }
+    
+        // Ensure the uploaded image stays in the preview after form submission
+        document.addEventListener("DOMContentLoaded", function() {
+            clearImage(); // Call clearImage on page load
+            const uploadedImageUrl = localStorage.getItem("uploadedImageUrl");
+            if (uploadedImageUrl) {
+                const preview = document.getElementById("preview");
+                preview.src = uploadedImageUrl;
+            }
+    
+            const predictionContainer = document.getElementById("prediction-container");
+            const loadingAnimation = document.getElementById("loading-animation");
+    
+            if (predictionContainer && loadingAnimation) {
+                predictionContainer.style.display = "none";
+                const progressIndicators = document.querySelectorAll(".progress-indicator");
+    
+                progressIndicators.forEach((indicator, index) => {
+                    setTimeout(() => {
+                        indicator.style.width = "100%";
+                    }, index * 500);
+                });
+    
+                setTimeout(function() {
+                    loadingAnimation.style.display = "none";
+                    predictionContainer.style.display = "block";
+                }, (progressIndicators.length + 1) * 500);
+            }
+        });
+    
+        function validateForm(event) {
+            const uploadedImage = document.getElementById("imageInput").files[0];
+            if (!uploadedImage && !localStorage.getItem('uploadedImageUrl')) {
+                document.getElementById("caution-message").style.display = "block";
+                document.getElementById("notification-message").style.display = "none";
+                setTimeout(() => {
+                    document.getElementById("caution-message").style.display = "none";
+                }, 1000);
+                event.preventDefault();
+                return false;
+            }
+            document.getElementById("notification-message").style.display = "block";
+            document.querySelector('button[type="submit"]').setAttribute('disabled', true);
+            return true;
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="front-end/CSS/developer.css">
+</head>
+<body>
+    {%include 'nav-bar.html'%}
+    <header>
+        <!-- <h1>ClevArt</h1> -->
+        <span class="logo"><img src="/front-end/images/ClevArt_logos.png" alt="logo"></span>
+        <p class="sub-description">An Art Classification System</p>
+        <p class="group-name">3D(Develop, Debug, Deploy) Team</p>
+    </header>
+    <main>
+        <div class="team-container">
+            <div class="team-member" onclick="showDetails('donnabel')">
+                <div class="member-photo">
+                    <img src="/front-end/images/donna.jpg" alt="images">
+                </div>
+                <p>Dela Cruz, Donnabel C.</p>
+            </div>
+            <div class="team-member" onclick="showDetails('sophia')">
+                <div class="member-photo">
+                    <img src="/front-end/images/sophia.jpeg" alt="images">
+                </div>
+                <p>Domingo, Sophia Kaye G.</p>
+            </div>
+            <div class="team-member" onclick="showDetails('clarissa')">
+                <div class="member-photo">
+                    <img src="/front-end/images/clarissa.jpg" alt="images">
+                </div>
+                <p>Dominguez, Clarissa V.</p>
+            </div>
+            <div class="team-member" onclick="showDetails('stephen')">
+                <div class="member-photo">
+                    <img src="/front-end/images/formal.jpg" alt="images">
+                </div>
+                <p>Espeño, Stephen E.</p>
+            </div>
+            <div class="team-member" onclick="showDetails('joseph')">
+                <div class="member-photo">
+                    <img src="/front-end/images/joseph.jpg" alt="images">
+                </div>
+                <p>Mandariaga, Joseph Andrei A.</p>
+            </div>
+            <div class="team-member" onclick="showDetails('carlos')">
+                <div class="member-photo">
+                    <img src="/front-end/images/carlos.png" alt="images">
+                </div>
+                <p>Pablo, Carlos Miguel D.</p>
+            </div>
+        </div>
+    </main>
+    <!-- for overlay -->
+    <div id="overlay" class="overlay" onclick="hideDetails()">
+        <div class="overlay-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="hideDetails()">&times;</span>
+            <div class="overlay-photo"></div>
+            <h2 id="overlay-name"></h2>
+            <p id="overlay-description"></p>
+            <div class="social-media">
+                <a href="#" id="overlay-cv" class="social-icon">
+                    <i class="fa-regular fa-file"></i>
+                </a>
+                <a href="#" id="overlay-facebook" class="social-icon">
+                    <i class="fa-brands fa-facebook"></i>
+                </a>
+                <a href="#" id="overlay-twitter" class="social-icon">
+                    <i class="fa-brands fa-twitter"></i>
+                </a>
+                <a href="#" id="overlay-instagram" class="social-icon">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="#" id="overlay-email" class="social-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {%include 'footer.html'%}
+    <script src="front-end/JS/developer.js"></script>
+</body>
+</html>

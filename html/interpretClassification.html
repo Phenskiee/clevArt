@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification</title>
+    <link rel="stylesheet" href="front-end/CSS/inter.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    {% include 'nav-bar.html' %}
+
+    <h1>ClevArt</h1>
+    <p>An Art Classification System</p>
+    <h4>Interpretation Classification</h4>
+    <div class="container">
+        <form action="/model/predict_interpret" method="post" enctype="multipart/form-data" class="upload-container">            
+            <div id="drop-zone" class="drop-zone">
+                <label for="image-upload" class="drop-zone-border">
+                    <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
+                    <span class="drop-zone-content">
+                        <i class="fas fa-cloud-upload-alt fa-3x"></i> <!-- Icon for upload -->
+                        <span>Drag and drop an image here<br>or click to upload</span>
+                    </span>
+                    <img id="preview" src="#" alt="Image Preview">
+                </label>
+            </div>
+    
+
+            <!-- Clear and Submit Buttons -->
+  
+            <div class="button-container">
+                <button type="button" id="clear-button">Clear</button>
+                <button type="submit">Get Interpretation</button>
+
+        </div>
+        </form>
+    
+
+        <div class="right-side" id="interpretation-container">
+            {% if prediction %}
+                <h2>Interpretation:</h2>
+                <p class="pew">{{ prediction }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="front-end/JS/classification.js"></script>
+
+   <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const dropZone = document.getElementById("drop-zone");
+    const fileInput = document.getElementById("image-upload");
+    const dropZoneContent = dropZone.querySelector(".drop-zone-content");
+    const preview = document.getElementById("preview");
+    const clearButton = document.getElementById("clear-button");
+
+    const handleFiles = (files) => {
+        const file = files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = "block";
+                dropZoneContent.style.display = "none";
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // Click event for file input
+    fileInput.addEventListener("change", function(e) {
+        e.preventDefault();
+        handleFiles(fileInput.files);
+    });
+
+    // Drag events for drop zone
+    dropZone.addEventListener("dragover", function(e) {
+        e.preventDefault();
+        dropZone.classList.add("hover");
+    });
+
+    dropZone.addEventListener("dragleave", function() {
+        dropZone.classList.remove("hover");
+    });
+
+    dropZone.addEventListener("drop", function(e) {
+        e.preventDefault();
+        dropZone.classList.remove("hover");
+        handleFiles(e.dataTransfer.files);
+    });
+
+    // Click event for drop zone content
+    dropZoneContent.addEventListener("click", function(e) {
+        e.preventDefault();
+        fileInput.click(); // Trigger file input click
+    });
+
+    // Clear button event
+    clearButton.addEventListener("click", function() {
+        preview.src = "#";
+        preview.style.display = "none";
+        dropZoneContent.style.display = "flex";
+        fileInput.value = "";
+    });
+});
+</script>
+
+
+</script>
+</body>
+</html>
