@@ -1,1 +1,1 @@
-# clevArt
+# clevArt (Capstone Project)
